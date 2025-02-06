@@ -22,3 +22,13 @@
 - vytvorenie triedy Text, z *moon-patrol-umb*
 - pridanie nadpisu, podnadpisu a spodného textu
 - pridanie tlačidla pre spustenie hry (bez funkcionality)
+
+
+
+
+## X Bonusy
+
+### X.1 Pridanie hudby a zvukových efektov
+- vytvorenie triedy BackroundMusic
+- spustenie skladby
+- úprava triedy Game

@@ -1,6 +1,7 @@
 import pygame
 import random
-from scripts.Scene import Scene 
+from scripts.Scene import Scene
+from scripts.utils.BackgroundMusic import BackgroundMusic
 
 # Trieda Game obsahujuca ...
 class Game():
@@ -11,6 +12,8 @@ class Game():
         self.fps = fps
         self.display = pygame.display
         self.event = pygame.event
+        self.backgroundMusic = BackgroundMusic()
+        self.backgroundMusic.play()
 
         self.initialize() # Inicializacia pygame aplikacie
         self.running = True # Ak je True, tak aplikacia je spustena
