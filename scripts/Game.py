@@ -1,5 +1,7 @@
 import pygame
 import random
+from scripts.GameObject import GameObject
+from scripts.Player import Player
 from scripts.Scene import Scene
 from scripts.utils.BackgroundMusic import BackgroundMusic
 
@@ -12,8 +14,10 @@ class Game():
         self.fps = fps
         self.display = pygame.display
         self.event = pygame.event
+        self.backgroundImage = pygame.image.load('assets/snowy-platform_800-599.jpg')
         self.backgroundMusic = BackgroundMusic()
         self.backgroundMusic.play()
+        self.player = None
 
         self.initialize() # Inicializacia pygame aplikacie
         self.running = True # Ak je True, tak aplikacia je spustena
@@ -27,6 +31,9 @@ class Game():
         self.scene = Scene(self)
         self.scene.initialize()
         self.score = 0
+        self.objects = []
+        self.addPlayer()
+        self.direction = None
 
     # Aktualizovanie nazvu okna
     def setCaption(self, caption: str = '') -> None:
@@ -37,9 +44,44 @@ class Game():
         pygame.display.flip()
         self.clock.tick(self.fps) # Ako rychlo
 
+    def addPlayer(self) -> None:
+        self.addObject(Player(self.window_width//2, self.window_height - 98, pygame.Color("red"), 'assets/shana.png', self.surface, 72, 48))
+
+    # https://github.com/Voltrifrodec/moon-patrol-umb/blob/feature/difficulty-implementation/scripts/Game.py
+    def addObject(self, gameObject: GameObject):
+        if isinstance(gameObject, Player): self.player = gameObject
+        # self.objects.appent()
+        # if isinstance(gameObject, Enemy):self.enemies.append(gameObject)
+        # if isinstance(gameObject, GameObject): self.objects.append(gameObject)
+
+    # Posun GameObject objektov
+    def moveObjects(self):
+        if self.direction is not None:
+            self.player.move(self.direction)
+
+    def movePlayerToLeft(self):
+        self.direction = 'Left'
+        self.player.direction = 'Left'
+        print('Moving player to the left')
+        # self.player.moveLeft()
+
+    def movePlayerToRight(self):
+        self.direction = 'Right'
+        print('Moving player to the right')
+        # self.player.moveRight()
+
+    # Vykreslenie vsetkych GameObject objektov naraz
+    def drawAllObjects(self):
+        self.player.draw()
+        # for gameObject in self.objects:
+        #     gameObject.draw()
+
     # Vykreslenie zmien - tu sa vykresluju objekty a zmeny
     def draw(self) -> None:
-        self.surface.fill(pygame.Color('BLACK'))
+        self.surface.fill(pygame.Color("black"))
+        self.surface.blit(self.backgroundImage, (0, 0))
+        self.moveObjects()
+        self.drawAllObjects()
 
     def drawScene(self) -> None:
         self.scene.drawScene()

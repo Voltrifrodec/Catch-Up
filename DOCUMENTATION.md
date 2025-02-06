@@ -27,6 +27,16 @@
 - pridanie tlačila Exit
 
 
+## 2 Práca na hre
+
+### 2.1 Vytvorenie univerzálnej triedy GameObject
+- vytvorenie novej triedy GameObject
+
+### 2.2 Vytvorenie hráča
+- vytvorenie obrázku pre hráča
+- pridanie osy pohybu
+- pridanie podpory klávesových skratiek
+- pridanie pohybu a prepočtu súradníc pre pohyb
 
 ## X Bonusy
 

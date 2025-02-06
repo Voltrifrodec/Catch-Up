@@ -1,6 +1,7 @@
 import pygame
 
 from scripts.Game import Game
+from scripts.Scene import GameScene
 
 # Konstanty
 ## Farby
@@ -18,6 +19,24 @@ while game.running:
 
         if pygame.mouse.get_pressed(3)[0]:
             game.scene.currentScene.update(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+
+        if isinstance(game.scene.currentScene, GameScene):
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_a]:
+                game.movePlayerToLeft()
+            if keys[pygame.K_d]:
+                game.movePlayerToRight()
+            if event.type == pygame.KEYUP:
+                game.direction = None
+
+
+
+        # if event.type == pygame.KEYDOWN:
+        #     if event.key == pygame.K_a:
+        #         game.movePlayerToLeft()
+
+        #     if event.key == pygame.K_d:
+        #         game.movePlayerToRight()
 
         if event.type == pygame.QUIT:
             game.exit()
