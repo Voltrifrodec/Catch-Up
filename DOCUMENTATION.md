@@ -38,6 +38,10 @@
 - pridanie podpory klávesových skratiek
 - pridanie pohybu a prepočtu súradníc pre pohyb
 
+### 2.3 Pridanie strelania
+- vytvorenie triedy Projectile
+- nastavenie streľby v hlavnom cykle (klávesová skratka SPACE)
+
 ## X Bonusy
 
 ### X.1 Pridanie hudby a zvukových efektov

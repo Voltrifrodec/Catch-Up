@@ -1,8 +1,9 @@
 import pygame
-import random
+import random, math
 from scripts.GameObject import GameObject
 from scripts.Player import Player
 from scripts.Scene import Scene
+from scripts.Projectile import Projectile
 from scripts.utils.BackgroundMusic import BackgroundMusic
 
 # Trieda Game obsahujuca ...
@@ -50,6 +51,7 @@ class Game():
     # https://github.com/Voltrifrodec/moon-patrol-umb/blob/feature/difficulty-implementation/scripts/Game.py
     def addObject(self, gameObject: GameObject):
         if isinstance(gameObject, Player): self.player = gameObject
+        if isinstance(gameObject, GameObject): self.objects.append(gameObject)
         # self.objects.appent()
         # if isinstance(gameObject, Enemy):self.enemies.append(gameObject)
         # if isinstance(gameObject, GameObject): self.objects.append(gameObject)
@@ -58,6 +60,8 @@ class Game():
     def moveObjects(self):
         if self.direction is not None:
             self.player.move(self.direction)
+        for gameObject in self.objects:
+            gameObject.move()
 
     def movePlayerToLeft(self):
         self.direction = 'Left'
@@ -70,11 +74,16 @@ class Game():
         print('Moving player to the right')
         # self.player.moveRight()
 
+    def playerShootProjectile(self):
+        projectileObject = self.player.shoot()
+        self.addObject(projectileObject)
+
     # Vykreslenie vsetkych GameObject objektov naraz
     def drawAllObjects(self):
         self.player.draw()
-        # for gameObject in self.objects:
-        #     gameObject.draw()
+        for gameObject in self.objects:
+            print(f'Object: {gameObject}')
+            gameObject.draw()
 
     # Vykreslenie zmien - tu sa vykresluju objekty a zmeny
     def draw(self) -> None:
@@ -82,6 +91,26 @@ class Game():
         self.surface.blit(self.backgroundImage, (0, 0))
         self.moveObjects()
         self.drawAllObjects()
+        self.checkCollisionOnAllObjects()
+
+    def checkCollisionOnAllObjects(self):
+        for obj in self.objects:
+            pass
+            # Enemies
+            # if isinstance(obj, Enemy):
+            #     if self.player.checkcollisions(obj):
+            #         self.endCurrentGame()
+            # Check destroying enemies
+            # for enemy in self.enemies:
+            #     if (isinstance(obj, Projectile)):
+            #         projectile = obj
+            #         if enemy.checkcollisions(projectile):
+            #             print("\tBoom, he got shot fr ong +1 L ration average Bratislava resident vibes 2004 Techno House Party")
+            #             self.deleteObject(enemy)
+            #             self.enemies.remove(enemy)
+            #             self.deleteObject(projectile)
+            #             self.score += math.ceil(1 * self.difficulty.value["scoreMultipler"])
+            #             return
 
     def drawScene(self) -> None:
         self.scene.drawScene()

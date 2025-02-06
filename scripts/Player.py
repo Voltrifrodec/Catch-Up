@@ -1,6 +1,8 @@
 import pygame
 
 from scripts.GameObject import GameObject
+from scripts.Projectile import Projectile
+from scripts.Direction import Direction
 # from scripts.Game import WINDOW_WIDTH # 800
 
 class Player(GameObject):
@@ -52,3 +54,7 @@ class Player(GameObject):
 
     def checkCollision(self, obj: GameObject):
         return self.rect.colliderect(obj.rect)
+    
+    def shoot(self):
+        [projectile_x, projectile_y] = self.position_x + self.width, self.position_y + (self.height //2)
+        return Projectile(projectile_x, projectile_y, surface=self.surface, projectileSpeed=self.projectileSpeed, direction=Direction.TOP)

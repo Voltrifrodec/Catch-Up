@@ -29,6 +29,9 @@ while game.running:
             if event.type == pygame.KEYUP:
                 game.direction = None
 
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                game.playerShootProjectile()
 
 
         # if event.type == pygame.KEYDOWN:
