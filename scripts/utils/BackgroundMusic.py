@@ -2,7 +2,8 @@ import pygame
 
 class BackgroundMusic():
     def __init__(self):
-        self.music_asset_path = "assets/04-faun-tanz-mit-mir.mp3"
+        # self.music_asset_path = "assets/04-faun-tanz-mit-mir.mp3"
+        self.music_asset_path = "assets/goofy ahh beat.mp3"
         self.mixer = pygame.mixer
         self.mixer.init()
         pass

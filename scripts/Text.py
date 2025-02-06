@@ -2,6 +2,7 @@
 import pygame
 
 WHITE = pygame.Color("white")
+ICY_BLUE = pygame.Color((103, 222, 205))
 BLACK = pygame.Color("black")
 
 FONT_SIZE_BUTTON = 40
@@ -13,6 +14,7 @@ FONT_SIZE_FOOTER = 10
 
 
 class Text:
+
     def __init__(
         self,
         text: str,
@@ -20,7 +22,7 @@ class Text:
         position: tuple[int, int] = (0, 0),
         font: str = "assets/unispace bd.ttf",
         antialias: bool = True,
-        textColor=WHITE,
+        textColor=ICY_BLUE,
     ) -> None:
         self.text = text
         self.fontSizePixel = fontSizePixel

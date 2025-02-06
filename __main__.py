@@ -16,6 +16,9 @@ game = Game(window_width = WINDOW_WIDTH, window_height = WINDOW_HEIGHT, fps = FP
 while game.running:
     for event in game.event.get():
 
+        if pygame.mouse.get_pressed(3)[0]:
+            game.scene.currentScene.update(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+
         if event.type == pygame.QUIT:
             game.exit()
             break

@@ -17,12 +17,14 @@
 #### 1.2.1 Vytvorenie triedy Scene
 - vytvorenie triedy
 - aktualizovanie triedy Game
+- pridanie onClickEventListener-ish funkcionality
 
 #### 1.2.2 Vytvorenie scény OnboardingScene
 - vytvorenie triedy Text, z *moon-patrol-umb*
 - pridanie nadpisu, podnadpisu a spodného textu
 - pridanie tlačidla pre spustenie hry (bez funkcionality)
-
+- pridanie pozadia, zmena farby
+- pridanie tlačila Exit
 
 
 

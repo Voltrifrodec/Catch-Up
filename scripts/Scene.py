@@ -18,6 +18,7 @@ class Scene():
 
     def initialize(self) -> None:
         self.mainMenuScene = OnboardingScene(self.game)
+        self.gameScene = GameScene(self.game)
         self.changeScene(self.mainMenuScene)
 
     def changeScene(self, scene: 'Scene'): # v '' pretoze volame rovnaky typ v akom je definovana funkcia
@@ -25,6 +26,9 @@ class Scene():
 
     def drawScene(self) -> None:
         self.currentScene.drawScene()
+
+    def update(self, x:int, y:int) -> None:
+        pass
 
 
 class OnboardingScene(Scene) :
@@ -36,15 +40,21 @@ class OnboardingScene(Scene) :
 
     def initializeSceneObjects(self) -> None:
 
+        # Nastavenie pozadia
+        self.backgroundImage = pygame.image.load('assets/darker-snowy-country_800-600.jpg')
+
         # Nadpis, Podnadpis
         self.gameTitleText = Text('Catch Up!', FONT_SIZE_TITLE)
         self.gameTitleText.changePosition((self.game.window_width//2 - self.gameTitleText.width//2, self.game.window_height//6 - self.gameTitleText.fontSizePixel//2))
-        self.gameSubtitleText = Text('Family friendy shooter', FONT_SIZE_TEXT)
+        self.gameSubtitleText = Text(
+            "Family friendy shooter", FONT_SIZE_TEXT)
         self.gameSubtitleText.changePosition((self.game.window_width//2 - self.gameSubtitleText.width//2, self.game.window_height//3 - self.gameSubtitleText.fontSizePixel//2))
 
         # Vytvorenie hlavneho menu
         self.startGameText = Text('PLAY', FONT_SIZE_BUTTON)
         self.startGameText.changePosition((self.game.window_width//2 - self.startGameText.width//2, self.game.window_height//2 - self.startGameText.fontSizePixel//2))
+        self.exitGameText = Text('EXIT', FONT_SIZE_BUTTON, textColor=pygame.Color("red"))
+        self.exitGameText.changePosition((self.game.window_width//2 - self.exitGameText.width//2, self.game.window_height//1.5 - self.exitGameText.fontSizePixel//2))
 
         # Copyright claim
         self.upperFooterText = Text("© 2025 Jakub V. Frodec", FONT_SIZE_FOOTER)
@@ -54,8 +64,33 @@ class OnboardingScene(Scene) :
 
     def drawScene(self) -> None:
         self.game.surface.fill(BLACK)
+        self.game.surface.blit(self.backgroundImage, (0, 0))
         self.game.surface.blit(self.startGameText.rendered, self.startGameText.position)
+        self.game.surface.blit(self.exitGameText.rendered, self.exitGameText.position)
         self.game.surface.blit(self.gameTitleText.rendered, self.gameTitleText.position)
         self.game.surface.blit(self.gameSubtitleText.rendered, self.gameSubtitleText.position)
         self.game.surface.blit(self.upperFooterText.rendered, self.upperFooterText.position)
-        self.game.surface.blit(self.lowerFooterText.rendered, self.lowerFooterText.position)
+        # self.game.surface.blit(self.lowerFooterText.rendered, self.lowerFooterText.position)
+
+    def update(self, x: int, y: int) -> None:
+        if self.startGameText.doesCollide(x, y):
+            self.game.scene.changeScene(self.game.scene.gameScene)
+        if self.exitGameText.doesCollide(x, y):
+            self.game.exit()
+
+class GameScene(Scene):
+    def __init__(self, game: Game):
+        super().__init__(game)
+        self.name = 'Game in progress'
+        self.game = game
+        self.initializeSceneObjects()
+
+    def initializeSceneObjects(self) -> None:
+        pass
+
+    def drawScene(self) -> None:
+        self.game.draw()
+        self.name = f'Game in progress (Score: {self.game.score:2})'
+
+    def update(self, x: int, y: int) -> None:
+        pass
