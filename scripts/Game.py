@@ -1,5 +1,6 @@
 import pygame
 import random
+from scripts.Scene import Scene 
 
 # Trieda Game obsahujuca ...
 class Game():
@@ -20,6 +21,8 @@ class Game():
         self.clock = pygame.time.Clock()
         self.surface = pygame.display.set_mode((self.window_width, self.window_height))
         self.setCaption('Catch up (v0)')
+        self.scene = Scene(self)
+        self.scene.initialize()
         self.score = 0
 
     # Aktualizovanie nazvu okna
@@ -34,6 +37,9 @@ class Game():
     # Vykreslenie zmien - tu sa vykresluju objekty a zmeny
     def draw(self) -> None:
         self.surface.fill(pygame.Color('BLACK'))
+
+    def drawScene(self) -> None:
+        self.scene.drawScene()
 
     # Ukoncenie aplikacie
     def exit(self) -> None:

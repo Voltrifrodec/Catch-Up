@@ -13,3 +13,12 @@
 - vytvorenie novej inštancie Game a nastavenie parametrov
 
 ### 1.2 Vytvorenie menu a obrazoviek
+
+#### 1.2.1 Vytvorenie triedy Scene
+- vytvorenie triedy
+- aktualizovanie triedy Game
+
+#### 1.2.2 Vytvorenie scény OnboardingScene
+- vytvorenie triedy Text, z *moon-patrol-umb*
+- pridanie nadpisu, podnadpisu a spodného textu
+- pridanie tlačidla pre spustenie hry (bez funkcionality)

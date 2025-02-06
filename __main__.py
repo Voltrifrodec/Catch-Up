@@ -1,4 +1,3 @@
-import sys
 import pygame
 
 from scripts.Game import Game
@@ -21,5 +20,5 @@ while game.running:
             game.exit()
             break
 
-    game.draw()
+    game.drawScene()
     game.update()
