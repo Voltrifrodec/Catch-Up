@@ -4,7 +4,9 @@ from scripts.GameObject import GameObject
 from scripts.Player import Player
 from scripts.Scene import Scene
 from scripts.Projectile import Projectile
-from scripts.utils.BackgroundMusic import BackgroundMusic
+from scripts.Enemy import Enemy
+from scripts.utils.BackgroundMusic import BackgroundMusic, GameOverBackgroundMusic
+from scripts.utils.SFX import playRandomMaleScream, playGameOverSFX
 
 # Trieda Game obsahujuca ...
 class Game():
@@ -17,8 +19,10 @@ class Game():
         self.event = pygame.event
         self.backgroundImage = pygame.image.load('assets/snowy-platform_800-599.jpg')
         self.backgroundMusic = BackgroundMusic()
+        self.backgroundGameOverMusic = GameOverBackgroundMusic()
         self.backgroundMusic.play()
         self.player = None
+        self.score = 0
 
         self.initialize() # Inicializacia pygame aplikacie
         self.running = True # Ak je True, tak aplikacia je spustena
@@ -33,8 +37,22 @@ class Game():
         self.scene.initialize()
         self.score = 0
         self.objects = []
+        self.enemies = []
         self.addPlayer()
         self.direction = None
+        self.groundSurfacePositionY = 150
+
+    def initializeNewGame(self) -> None:
+        self.clock = pygame.time.Clock()
+        self.scene.changeScene(self.scene.gameOverScene)
+        self.score = 0
+        self.objects = []
+        self.enemies = []
+        self.addPlayer()
+        self.direction = None
+        if self.isInGame():
+            self.backgroundGameOverMusic.stop()
+            self.backgroundMusic.play()
 
     # Aktualizovanie nazvu okna
     def setCaption(self, caption: str = '') -> None:
@@ -51,17 +69,38 @@ class Game():
     # https://github.com/Voltrifrodec/moon-patrol-umb/blob/feature/difficulty-implementation/scripts/Game.py
     def addObject(self, gameObject: GameObject):
         if isinstance(gameObject, Player): self.player = gameObject
+        if isinstance(gameObject, Enemy):self.enemies.append(gameObject)
         if isinstance(gameObject, GameObject): self.objects.append(gameObject)
         # self.objects.appent()
         # if isinstance(gameObject, Enemy):self.enemies.append(gameObject)
         # if isinstance(gameObject, GameObject): self.objects.append(gameObject)
 
+    def isInGame(self) -> bool:
+        return self.scene.currentScene == self.scene.gameScene
+
     # Posun GameObject objektov
     def moveObjects(self):
-        if self.direction is not None:
-            self.player.move(self.direction)
-        for gameObject in self.objects:
-            gameObject.move()
+        # if self.direction is not None:
+        #     self.player.move(self.direction)
+        for obj in self.objects:
+            if isinstance(obj, Player) and self.direction is not None:
+                self.player.move(self.direction)
+            if (isinstance(obj, Enemy)):
+                isOutOfScreen = obj.isOutOfScreen()
+                if (isOutOfScreen):
+                    obj.resetPosition()
+                    self.executeGameOver()
+                    self.score += 1
+                else:
+                    obj.move()
+
+            # Projectiles
+            if (isinstance(obj, Projectile)):
+                isOutOfScreen = obj.isOutOfScreen()
+                if (isOutOfScreen):
+                    self.deleteObject(obj)
+                else:
+                    obj.move()
 
     def movePlayerToLeft(self):
         self.direction = 'Left'
@@ -93,27 +132,52 @@ class Game():
         self.drawAllObjects()
         self.checkCollisionOnAllObjects()
 
+    def calculateGroundSurfaceY(self):
+        return self.surface.get_height() - self.groundSurfacePositionY
+
+    def enemySpawn(self):
+        print(f'Creating enemies...')
+        enemy = Enemy(position_x=random.randint(0, 800), position_y=24, width=48, height=48, image_path='assets/enemy.png', surface=self.surface, speed=random.randint(1, 3))
+        self.addObject(enemy)
+
+    def getEnemiesCount(self):
+        return len(self.enemies)
+
+    def getProjectileCount(self):
+        return len([obj for obj in self.objects if isinstance(obj, Projectile)])
+
+    def deleteObject(self, obj):
+        self.objects.remove(obj)
+        del obj
+
     def checkCollisionOnAllObjects(self):
         for obj in self.objects:
-            pass
             # Enemies
-            # if isinstance(obj, Enemy):
-            #     if self.player.checkcollisions(obj):
-            #         self.endCurrentGame()
+            if isinstance(obj, Enemy):
+                if self.player.checkCollision(obj):
+                    self.executeGameOver()
             # Check destroying enemies
-            # for enemy in self.enemies:
-            #     if (isinstance(obj, Projectile)):
-            #         projectile = obj
-            #         if enemy.checkcollisions(projectile):
-            #             print("\tBoom, he got shot fr ong +1 L ration average Bratislava resident vibes 2004 Techno House Party")
-            #             self.deleteObject(enemy)
-            #             self.enemies.remove(enemy)
-            #             self.deleteObject(projectile)
-            #             self.score += math.ceil(1 * self.difficulty.value["scoreMultipler"])
-            #             return
+            for enemy in self.enemies:
+                if (isinstance(obj, Projectile)):
+                    projectile = obj
+                    if enemy.checkCollisions(projectile):
+                        print("\tBoom, he got shot fr ong +1 L ration average Bratislava resident vibes 2004 Techno House Party")
+                        playRandomMaleScream()
+                        self.deleteObject(enemy)
+                        self.enemies.remove(enemy)
+                        self.deleteObject(projectile)
+                        self.score += math.ceil(1)
+                        return
 
     def drawScene(self) -> None:
         self.scene.drawScene()
+
+    def executeGameOver(self) -> None:
+        playGameOverSFX()
+        self.backgroundMusic.stop()
+        self.backgroundGameOverMusic.play()
+        self.scene.changeScene(self.scene.gameOverScene)
+        self.initializeNewGame()
 
     # Ukoncenie aplikacie
     def exit(self) -> None:

@@ -3,7 +3,7 @@ from scripts.GameObject import GameObject
 from scripts.Direction import Direction
 
 class Projectile(GameObject):
-    def __init__(self, position_x: int = 0, position_y: int = 98, color: pygame.Color = pygame.Color("black"), image_path: str = None, surface: pygame.Surface = None, width: int = 4, height: int = 4, direction = Direction.TOP, projectileSpeed= 8):
+    def __init__(self, position_x: int = 0, position_y: int = 98, color: pygame.Color = pygame.Color("black"), image_path: str = None, surface: pygame.Surface = None, width: int = 8, height: int = 8, direction = Direction.TOP, projectileSpeed= 8):
         super().__init__(position_x, position_y, color, image_path, surface, width, height)
         self.projectileSpeed = projectileSpeed
         self.rect = pygame.Rect(self.position_x, self.position_y, self.width, self.height)

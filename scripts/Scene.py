@@ -19,6 +19,7 @@ class Scene():
     def initialize(self) -> None:
         self.mainMenuScene = OnboardingScene(self.game)
         self.gameScene = GameScene(self.game)
+        self.gameOverScene = GameOverScene(self.game)
         self.changeScene(self.mainMenuScene)
 
     def changeScene(self, scene: 'Scene'): # v '' pretoze volame rovnaky typ v akom je definovana funkcia
@@ -37,6 +38,8 @@ class OnboardingScene(Scene) :
         super().__init__(game)
         self.name = 'Catch Up (v0)'
         self.initializeSceneObjects()
+        self.game.backgroundGameOverMusic.stop()
+        self.game.backgroundMusic.play()
 
     def initializeSceneObjects(self) -> None:
 
@@ -70,7 +73,7 @@ class OnboardingScene(Scene) :
         self.game.surface.blit(self.gameTitleText.rendered, self.gameTitleText.position)
         self.game.surface.blit(self.gameSubtitleText.rendered, self.gameSubtitleText.position)
         self.game.surface.blit(self.upperFooterText.rendered, self.upperFooterText.position)
-        # self.game.surface.blit(self.lowerFooterText.rendered, self.lowerFooterText.position)
+        self.game.surface.blit(self.lowerFooterText.rendered, self.lowerFooterText.position)
 
     def update(self, x: int, y: int) -> None:
         if self.startGameText.doesCollide(x, y):
@@ -86,11 +89,48 @@ class GameScene(Scene):
         self.initializeSceneObjects()
 
     def initializeSceneObjects(self) -> None:
+        self.textScore = Text(f'SCORE {self.game.score:2}', FONT_SIZE_TEXT)
         pass
 
     def drawScene(self) -> None:
         self.game.draw()
+        self.textScore = Text(f'SCORE {self.game.score:2}', FONT_SIZE_TEXT)
+        self.game.surface.blit(self.textScore.rendered, self.textScore.position)
         self.name = f'Game in progress (Score: {self.game.score:2})'
 
     def update(self, x: int, y: int) -> None:
         pass
+
+
+class GameOverScene(Scene):
+    # Konstruktor
+    def __init__(self, game: Game):
+        super().__init__(game)
+        self.name = "GAME OVER"
+        self.initializeSceneObjects()
+        self.mainMenuScene = OnboardingScene(self.game)
+
+    def initializeSceneObjects(self) -> None:
+
+        self.sceneTitleText = Text('GAME OVER', FONT_SIZE_TITLE, textColor=pygame.Color("red"))
+        self.sceneTitleText.changePosition((self.game.window_width//2 - self.sceneTitleText.width//2, self.game.window_height//6 - self.sceneTitleText.fontSizePixel//2))
+        
+
+        self.textScore = Text(f"SCORE {self.game.score:2}", FONT_SIZE_TEXT)
+        self.textScore.changePosition((self.game.window_width//2 - self.textScore.width//2, self.game.window_height - self.textScore.fontSizePixel*6))
+
+        self.mainMenuText = Text('MAIN MENU', FONT_SIZE_BUTTON)
+        self.mainMenuText.changePosition((self.game.window_width//2 - self.mainMenuText.width//2, self.game.window_height - self.mainMenuText.fontSizePixel*4))
+
+    def drawScene(self) -> None:
+        self.game.draw()
+        self.game.surface.fill(BLACK)
+        self.game.surface.blit(self.textScore.rendered, self.textScore.position)
+        self.game.surface.blit(self.mainMenuText.rendered, self.mainMenuText.position)
+        self.game.surface.blit(self.sceneTitleText.rendered, self.sceneTitleText.position)
+        self.name = f"Game Over! (Score: {self.game.score:2})"
+
+    def update(self, x: int, y: int) -> None:
+        if self.mainMenuText.doesCollide(x, y):
+            self.mainMenuScene.initialize()
+            self.game.scene.changeScene(self.mainMenuScene)

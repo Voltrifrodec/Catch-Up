@@ -3,6 +3,7 @@ import pygame
 from scripts.GameObject import GameObject
 from scripts.Projectile import Projectile
 from scripts.Direction import Direction
+from scripts.utils.SFX import sfx_gun
 # from scripts.Game import WINDOW_WIDTH # 800
 
 class Player(GameObject):
@@ -10,7 +11,7 @@ class Player(GameObject):
         super().__init__(position_x, position_y, color, image_path, surface, width, height)
         self.startingPosition = position_x, position_y
         self.movementSpeed = 0.145
-        self.shootingSpeed = 0.065
+        self.shootingSpeed = 0.0265
         self.projectileSpeed = 0.08
         self.position_x_limit = 800  # Redundant?
 
@@ -56,5 +57,6 @@ class Player(GameObject):
         return self.rect.colliderect(obj.rect)
     
     def shoot(self):
-        [projectile_x, projectile_y] = self.position_x + self.width, self.position_y + (self.height //2)
+        [projectile_x, projectile_y] = self.position_x + self.width//2 + 5, self.position_y + (self.height //2)
+        sfx_gun().play()
         return Projectile(projectile_x, projectile_y, surface=self.surface, projectileSpeed=self.projectileSpeed, direction=Direction.TOP)
