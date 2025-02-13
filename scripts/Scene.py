@@ -73,7 +73,7 @@ class OnboardingScene(Scene) :
         self.game.surface.blit(self.gameTitleText.rendered, self.gameTitleText.position)
         self.game.surface.blit(self.gameSubtitleText.rendered, self.gameSubtitleText.position)
         self.game.surface.blit(self.upperFooterText.rendered, self.upperFooterText.position)
-        self.game.surface.blit(self.lowerFooterText.rendered, self.lowerFooterText.position)
+        # self.game.surface.blit(self.lowerFooterText.rendgitered, self.lowerFooterText.position)
 
     def update(self, x: int, y: int) -> None:
         if self.startGameText.doesCollide(x, y):
