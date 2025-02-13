@@ -8,7 +8,7 @@ Defend your high ground against the horrors of the cruel winter tundra. Simple s
 
 Start the game by using following command: 
 ```python
-python -u "c:\Users\nendo\Desktop\Catch-Up\__main__.py"`
+python -u '__main__.py'
 ```
 
 ## How to play
