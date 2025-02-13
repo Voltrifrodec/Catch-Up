@@ -148,7 +148,7 @@ class Game():
     # Vytvorenie/Vykreslenie noveho nepriatela 
     def enemySpawn(self):
         print(f'Creating enemies...')
-        enemy = Enemy(position_x=random.randint(0, 800), position_y=24, width=48, height=48, image_path='assets/enemy.png', surface=self.surface, speed=random.randint(1, 3))
+        enemy = Enemy(position_x=random.randint(0, 800 - 48), position_y=24, width=48, height=48, image_path='assets/enemy.png', surface=self.surface, speed=random.randint(1, 3))
         self.addObject(enemy)
 
     # Pocet nepriatelov aktualne v hre
