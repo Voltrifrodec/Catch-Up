@@ -42,9 +42,25 @@
 - vytvorenie triedy Projectile
 - nastavenie streľby v hlavnom cykle (klávesová skratka SPACE)
 
+### 2.4 Pridanie nepriateľov
+- vytvorenie triedy Enemy
+- pridanie logiky pre pohyb
+- pridanie kolízií s hráčom a guľkou
+- pridanie počítania skóre
+
+## 3 Vylepšovanie hry
+
+### 3.1 Pridanie 'Game Over' scény
+
+<!-- ## 3 Logika hr -->
+
 ## X Bonusy
 
 ### X.1 Pridanie hudby a zvukových efektov
 - vytvorenie triedy BackroundMusic
 - spustenie skladby
 - úprava triedy Game
+
+### X.2 Pridanie zvukových efektov pre akcie
+- vytvorenie novej triedy SFX
+- vytvorenie triedy sfx_gun, ktorá prehráva zvuk streľby zo zbrane
